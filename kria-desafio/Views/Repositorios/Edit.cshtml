@@ -1,0 +1,64 @@
+﻿@model kria_desafio.Models.Repositorio
+
+@{
+    ViewData["Title"] = "Editar";
+}
+
+@if (!string.IsNullOrEmpty(ViewData["ErrorMessage"] as string))
+{
+    <h3 style="color: rgb(200, 57, 45);">Editar</h3>
+    <div class="alert alert-danger mt-3" role="alert">
+        @ViewData["ErrorMessage"]
+    </div>
+    <a asp-action="Index">Voltar aos repositórios</a>
+}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <form asp-action="Edit" class="card p-4 bg-white">
+            <h3 style="color: rgb(200, 57, 45);">Edite o repositório</h3>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Nome" class="control-label">Nome</label>
+                <input asp-for="Nome" class="form-control" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="DataUltimaAtualizacao" class="control-label">Data de Última Atualização</label>
+                <input asp-for="DataUltimaAtualizacao" class="form-control" />
+                <span asp-validation-for="DataUltimaAtualizacao" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Descricao" class="control-label">Descrição</label>
+                <textarea asp-for="Descricao" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Descricao" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="DonoId" class="control-label">Dono</label>
+                <select asp-for="DonoId" class="form-control" asp-items="ViewBag.DonoId"></select>
+                <span asp-validation-for="DonoId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="LinguagemId" class="control-label">Linguagem</label>
+                <select asp-for="LinguagemId" class="form-control" asp-items="ViewBag.LinguagemId"></select>
+                <span asp-validation-for="LinguagemId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group d-flex justify-content-between">
+                <button type="reset" class="btn btn-outline-secondary">Limpar</button>
+                <input type="submit" value="Salvar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

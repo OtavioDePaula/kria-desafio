@@ -1,0 +1,117 @@
+﻿@model kria_desafio.Models.Repositorio
+
+@{
+    ViewData["Title"] = "Cadastre um novo repositório";
+}
+
+@{
+    if (!string.IsNullOrEmpty(ViewData["ErrorMessage"] as string))
+    {
+        <div class="alert alert-danger mt-3" role="alert">
+            @ViewData["ErrorMessage"]
+        </div>
+    }
+}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <form asp-action="Create" class="card p-4 bg-white">
+            <h3 style="color: rgb(200, 57, 45);">Cadastre um novo repositório</h3>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Nome" class="control-label">Nome</label>
+                <input asp-for="Nome" class="form-control" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="DataUltimaAtualizacao" class="control-label">Data de Última Atualização</label>
+                <input asp-for="DataUltimaAtualizacao" class="form-control" />
+                <span asp-validation-for="DataUltimaAtualizacao" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Descricao" class="control-label">Descrição</label>
+                <textarea asp-for="Descricao" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Descricao" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="dono">Dono</label>
+                <input id="dono" class="form-control" name="nomeDono" />
+                <input type="hidden" id="DonoId" name="DonoId" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="linguagem">Linguagem</label>
+                <input id="linguagem" class="form-control" name="nomeLinguagem" />
+                <input type="hidden" id="LinguagemId" name="LinguagemId" />
+            </div>
+
+            <div class="form-group d-flex justify-content-between">
+                <button type="reset" class="btn btn-outline-secondary">Limpar</button>
+                <input type="submit" value="Cadastrar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(function () {
+            $("#dono").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Repositorios/BuscarDonos",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.nome,
+                                    value: item.id
+                                };
+                            }));
+                        }
+                    });
+                },
+                minLength: 1,
+                select: function (event, ui) {
+                    $("#dono").val(ui.item.label);
+                    $("#DonoId").val(ui.item.value);
+                    return false;
+                }
+            });
+
+            $("#linguagem").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Repositorios/BuscarLinguagens",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.nome,
+                                    value: item.id
+                                };
+                            }));
+                        }
+                    });
+                },
+                minLength: 1,
+                select: function (event, ui) {
+                    $("#linguagem").val(ui.item.label);
+                    $("#LinguagemId").val(ui.item.value);
+                    return false;
+                }
+            });
+        });
+    </script>
+}

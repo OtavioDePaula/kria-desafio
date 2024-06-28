@@ -1,0 +1,52 @@
+﻿@model IEnumerable<kria_desafio.Models.Repositorio>
+
+@{
+    ViewData["Title"] = "Repositórios";
+}
+
+@{
+    if (!string.IsNullOrEmpty(TempData["SucessfullyMessage"] as string))
+    {
+        <div class="alert alert-info mt-4" role="alert">
+            @TempData["SucessfullyMessage"]
+        </div>
+    }
+}
+
+<h1 class="mb-4" style="color: rgb(200, 57, 45);">Repositórios</h1>
+
+<div class="d-flex justify-content-between mb-4">
+    <div>
+        <a asp-action="Create" class="btn btn-outline-primary">Novo Repositório</a>
+    </div>
+    <div>
+        <form asp-action="DeleteAllRepositorios" onsubmit="return confirm('Tem certeza que deseja excluir todos os repositórios?');">
+            <button type="submit" class="btn btn-outline-danger btn-delete">Excluir todos repositórios</button>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nome)</h5>
+                    <p class="card-text"><strong>Linguagem:</strong> @Html.DisplayFor(modelItem => item.Linguagem.Nome)</p>
+                    <p class="card-text"><strong>Dono:</strong> @Html.DisplayFor(modelItem => item.Dono.Nome)</p>
+                    <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-outline-custom">Ver Mais</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@{
+    if (!string.IsNullOrEmpty(ViewData["ErrorMessage"] as string))
+    {
+        <div class="alert alert-warning mt-4" role="alert">
+            @ViewData["ErrorMessage"]
+        </div>
+    }
+}
